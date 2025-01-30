@@ -35,7 +35,15 @@ Nous allons créer les ressources suivantes à l'aide de Terraform :
 - un compte utilisateur de la base de données
 
 1. Commencer par créer le bucket GCS (Google Cloud Storage) qui servira à stocker le state Terraform.
-2. Définir les éléments de base nécessaires à la bonne exécution de terraform : utiliser l'exemple sur le [repo du cours](https://github.com/aballiet/devops-dauphine-2024/tree/main/exemple/cloudbuild-terraform) si besoin pour vous aider
+```hcl
+PROJECT_ID=$(gcloud config get-value project)
+gsutil mb gs://${PROJECT_ID}-tfstate
+```
+2. Définir les éléments de base nécessaires à la bonne exécution de terraform : utiliser l'exemple sur le [repo du cours]
+```hcl
+Création de plusieurs fichiers .tf (backend,main,terraform.tfvars,variables)
+```
+(https://github.com/aballiet/devops-dauphine-2024/tree/main/exemple/cloudbuild-terraform) si besoin pour vous aider
 3. Afin de créer la base de données, utiliser la documentation [SQL Database](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database) et enfin un [SQL User](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_user)
    1. Pour `google_sql_database`, définir `name="wordpress"` et `instance="main-instance"`
    2. Pour `google_sql_user`, définissez le comme ceci :
@@ -48,8 +56,9 @@ Nous allons créer les ressources suivantes à l'aide de Terraform :
       ```
 4. Lancer `terraform plan`, vérifier les changements puis appliquer les changements avec `terraform apply`
 5. Vérifier que notre utilisateur existe bien : https://console.cloud.google.com/sql/instances/main-instance/users (veiller à bien séléctionner le projet GCP sur lequel vous avez déployé vos ressources)
+![main-instance](DevOps-Dauphine-TP/images/Main-instance-db.png)
 6. Rendez-vous sur https://console.cloud.google.com/sql/instances/main-instance/databases. Quelles sont les base de données présentes sur votre instance `main-instance` ? Quels sont les types ?
-
+![main-instance-type](DevOps-Dauphine-TP/images/Main-instance-type-db.png)
 ## Partie 2 : Docker
 
 Wordpress dispose d'une image Docker officielle disponible sur [DockerHub](https://hub.docker.com/_/wordpress)
